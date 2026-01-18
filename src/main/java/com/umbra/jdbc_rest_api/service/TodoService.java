@@ -1,0 +1,45 @@
+package com.umbra.jdbc_rest_api.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.umbra.jdbc_rest_api.dto.CreateTodoRequest;
+import com.umbra.jdbc_rest_api.dto.UpdateTodoRequest;
+import com.umbra.jdbc_rest_api.model.Todo;
+import com.umbra.jdbc_rest_api.repository.TodoRepository;
+
+@Service
+@Transactional
+public class TodoService {
+
+  private final TodoRepository repository;
+
+  public TodoService(TodoRepository repository) {
+    this.repository = repository;
+  }
+
+  @Transactional(readOnly = true)
+  public List<Todo> findAll() {
+    return repository.findAll();
+  }
+
+  @Transactional(readOnly = true)
+  public Todo findById(Long id) {
+    return repository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Todo not found"));
+  }
+
+  public Todo create(CreateTodoRequest request) {
+    return repository.save(request.title());
+  }
+
+  public void update(Long id, UpdateTodoRequest request) {
+    repository.update(id, request.title(), request.completed());
+  }
+
+  public void delete(Long id) {
+    repository.delete(id);
+  }
+}
