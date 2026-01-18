@@ -1,6 +1,8 @@
 package com.umbra.jdbc_rest_api.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,11 +47,12 @@ public class TodoController {
   }
 
   @PutMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void update(
-      @PathVariable Long id,
-      @RequestBody UpdateTodoRequest request) {
+  public Map<String, Object> update(@PathVariable Long id, @RequestBody UpdateTodoRequest request) {
     service.update(id, request);
+    Map<String, Object> response = new HashMap<>();
+    response.put("status", "success");
+    response.put("message", "Todo updated successfully");
+    return response;
   }
 
   @DeleteMapping("/{id}")

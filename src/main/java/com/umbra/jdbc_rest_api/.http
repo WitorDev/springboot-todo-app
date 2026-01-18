@@ -5,7 +5,7 @@ Accept: application/json
 ###
 
 ### Get todo by ID
-GET http://localhost:8080/api/todos/1
+GET http://localhost:8080/api/todos/4
 Accept: application/json
 
 ###
@@ -24,7 +24,7 @@ Accept: application/json
 ###
 
 ### Update an existing todo
-PUT http://localhost:8080/api/todos/2
+PUT http://localhost:8080/api/todos/4
 Content-Type: application/json
 Accept: application/json
 
@@ -37,5 +37,7 @@ Accept: application/json
 ###
 
 ### Delete a todo
-DELETE http://localhost:8080/api/todos/5
+DELETE http://localhost:8080/api/todos/4
 Accept: application/json
+
+###

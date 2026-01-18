@@ -2,8 +2,10 @@ package com.umbra.jdbc_rest_api.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.umbra.jdbc_rest_api.dto.CreateTodoRequest;
 import com.umbra.jdbc_rest_api.dto.UpdateTodoRequest;
@@ -25,10 +27,9 @@ public class TodoService {
     return repository.findAll();
   }
 
-  @Transactional(readOnly = true)
   public Todo findById(Long id) {
     return repository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Todo not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
   }
 
   public Todo create(CreateTodoRequest request) {
@@ -40,6 +41,9 @@ public class TodoService {
   }
 
   public void delete(Long id) {
-    repository.delete(id);
+    Todo existing = repository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+
+    repository.delete(existing.getId());
   }
 }
