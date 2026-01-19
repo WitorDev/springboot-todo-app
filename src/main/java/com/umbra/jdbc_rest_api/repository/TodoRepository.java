@@ -21,9 +21,10 @@ public class TodoRepository {
 
   public List<Todo> findAll() {
     String sql = """
-            SELECT id, title, completed, created_at
-            FROM todos
-        """;
+        SELECT id, title, completed, created_at
+        FROM todos
+        ORDER BY created_at ASC;
+                """;
 
     return jdbcTemplate.query(sql, rowMapper);
   }

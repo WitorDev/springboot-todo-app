@@ -46,4 +46,12 @@ public class TodoService {
 
     repository.delete(existing.getId());
   }
+
+  public void toggleCompleted(Long id, String title) {
+    Todo todo = repository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Todo not found: " + id));
+
+    repository.update(id, title, !todo.isCompleted());
+  }
+
 }

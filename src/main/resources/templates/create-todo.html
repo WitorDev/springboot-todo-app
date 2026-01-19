@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Create Todo</title>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="all"
+      href="../static/css/global.css"
+      th:href="@{/css/global.css}"
+    />
+  </head>
+
+  <body>
+    <header class="todo-header">
+      <img th:src="@{/images/logo.png}" width="50px" alt="Todo App Logo" />
+      <h1>Create Todo</h1>
+    </header>
+
+    <section>
+      <a class="todo-create-button" href="/todos">Back to todos</a>
+    </section>
+
+    <section>
+      <form th:action="@{/todos}" method="post" class="create-todo-card">
+        <input
+          type="text"
+          name="title"
+          placeholder="Todo title"
+          required
+          style="width: 100%; padding: 0.5rem"
+        />
+
+        <button type="submit" class="todo-create-button">Create Todo</button>
+      </form>
+    </section>
+  </body>
+</html>
