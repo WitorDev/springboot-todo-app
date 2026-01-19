@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://thymeleaft.com">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="all"
+      href="../static/css/global.css"
+      th:href="@{/css/global.css}"
+    />
+    <title>Todos</title>
+  </head>
+  <body>
+    <header class="todo-header">
+      <img th:src="@{/images/logo.png}" width="50px" alt="Todo App Logo" />
+      <h1>Todos</h1>
+    </header>
+
+    <section>
+      <a class="todo-create-button" href="/todos/new">+ New Todo</a>
+    </section>
+
+    <ul>
+      <li
+        th:each="todo : ${todos}"
+        class="todo-card"
+        th:classappend="${todo.completed} ? 'completed' : ''"
+      >
+        <form
+          th:action="@{/todos/{id}/{title}/toggle(id=${todo.id}, title=${todo.title})}"
+          method="post"
+        >
+          <input
+            type="checkbox"
+            th:checked="${todo.completed}"
+            onchange="this.form.submit()"
+          />
+
+          <span th:text="${todo.title}"></span>
+        </form>
+        <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post">
+          <button class="delete-button" type="submit" title="Delete todo">
+            ❌
+          </button>
+        </form>
+      </li>
+    </ul>
+  </body>
+</html>
