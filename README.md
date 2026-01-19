@@ -1,4 +1,4 @@
-# springboot-todo-app
+# Springboot Todo Application
 Java Rest API made with the Springboot framework, has a REST API and views for presenting data in the MVC design-pattern.
 
 <img width="1920" height="962" alt="image" src="https://github.com/user-attachments/assets/f759ffe6-d850-4a45-b511-6c1932a114ac" />
