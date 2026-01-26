@@ -29,15 +29,23 @@ public class TodoService {
 
   public Todo findById(Long id) {
     return repository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+        .orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Todo not found"));
   }
 
   public Todo create(CreateTodoRequest request) {
     return repository.save(request.title());
   }
 
-  public void update(Long id, UpdateTodoRequest request) {
-    repository.update(id, request.title(), request.completed());
+  public Todo update(Long id, UpdateTodoRequest request) {
+    int rows = repository.update(id, request.title(), request.completed());
+
+    if (rows == 0) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found");
+    }
+
+    return repository.findById(id).get();
   }
 
   public void delete(Long id) {

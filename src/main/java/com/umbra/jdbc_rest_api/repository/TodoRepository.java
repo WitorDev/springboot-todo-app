@@ -51,14 +51,14 @@ public class TodoRepository {
     return findById(id).orElseThrow();
   }
 
-  public void update(Long id, String title, boolean completed) {
+  public int update(Long id, String title, boolean completed) {
     String sql = """
             UPDATE todos
             SET title = ?, completed = ?
             WHERE id = ?
         """;
 
-    jdbcTemplate.update(sql, title, completed, id);
+    return jdbcTemplate.update(sql, title, completed, id);
   }
 
   public void delete(Long id) {
