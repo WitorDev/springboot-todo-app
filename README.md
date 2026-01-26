@@ -1,53 +1,212 @@
-# springboot-todo-app
-Java Rest API made with the Springboot framework, has a REST API and views for presenting data in the MVC design-pattern.
+```springboot-todo-app```
 
-<img width="1920" height="962" alt="image" src="https://github.com/user-attachments/assets/f759ffe6-d850-4a45-b511-6c1932a114ac" />
+# Spring Boot REST API using JDBC, PostgreSQL, and Jakarta Bean Validation
 
-<hr>
+<img width="1920" height="962" alt="image" src="https://github.com/user-attachments/assets/f759ffe6-d850-4a45-b511-6c1932a114ac" /> <hr>
+## 📝 Overview
 
-Check it out live [here]()
+This project is a RESTful Todo API built with Spring Boot 3.
+It implements CRUD operations over a PostgreSQL database using Spring JDBC (JdbcTemplate) instead of an ORM.
 
-## 📝 Spring Boot Todo App
+The application follows a layered architecture separating controllers, services, repositories, and DTOs.
+Incoming requests are validated using Jakarta Bean Validation before being processed.
 
-**This project is a Todo application built with Spring Boot, designed to practice and demonstrate backend fundamentals using clean architecture, RESTful APIs, and server-side rendering following the MVC design pattern.**
+## 🧱 Architecture
 
-The application exposes a REST API for managing todos and also provides Thymeleaf-based views to present the data in a traditional web interface. The backend communicates directly with a PostgreSQL database using JDBC, allowing full control over SQL queries and data mapping.
+The project is structured as:
 
-### 🚀 What this project demonstrates
+```Controller → Service → Repository → PostgreSQL```
 
-- Building a RESTful API with Spring Boot using proper HTTP methods (GET, POST, PUT, DELETE)
-- Applying the MVC (Model–View–Controller) pattern with a clear separation between:
-- API controllers
-- View controllers
-- Service and repository layers
-- Using JDBC with Spring (JdbcTemplate) instead of an ORM to better understand:
-- SQL queries
-- Result mapping with RowMapper
-- Database transactions and error handling
-- Integrating PostgreSQL for persistent data storage
-- Rendering dynamic HTML pages using Thymeleaf, passing data from controllers to views
-- Organizing the codebase using a clean, layered architecture for maintainability and clarity
+---
 
-### 📌 Features
+| Layer | Responsibility |
+|------|----------------|
+| Controller | API endpoints, request validation, HTTP responses |
+| Service | Business logic |
+| Repository | SQL queries and JDBC access |
+| DTOs | API request objects |
+| Models | Database entities |
 
-Create, read, update, and delete todos
+---
 
-REST API endpoints for programmatic access
+## 🗄 Database
 
-Server-side rendered views for visual interaction
+PostgreSQL is used for persistence.
 
-Todo fields include:
+Table: todos
 
 ```
-id
-
-title
-
-completed
-
-created_at
+CREATE TABLE todos (
+  id BIGSERIAL PRIMARY KEY,
+  title VARCHAR(100) NOT NULL,
+  completed BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 ```
 
-<hr>
+## 🔐 Validation
 
-__This project was built as a learning-focused application, emphasizing understanding how Spring Boot works under the hood—especially request handling, database access with JDBC, and MVC-based rendering—rather than relying on high-level abstractions._
+Request bodies are validated using Jakarta Bean Validation:
+
+```
+
+@NotBlank
+@Size(min = 1, max = 100)
+String title
+
+```
+
+Invalid requests return 400 Bad Request automatically.
+
+## 📡 REST API
+
+---
+
+**Create Todo**
+
+POST /api/todos
+
+Request
+
+```
+{
+  "title": "Learn Spring Boot"
+}
+
+```
+
+Response — 201 Created
+
+```
+{
+  "id": 1,
+  "title": "Learn Spring Boot",
+  "completed": false,
+  "createdAt": "2026-01-26T14:32:10"
+}
+```
+
+---
+
+**Get All Todos**
+
+GET /api/todos
+
+Response — 200 OK
+
+```
+[
+  {
+    "id": 1,
+    "title": "Learn Spring Boot",
+    "completed": false,
+    "createdAt": "2026-01-26T14:32:10"
+  }
+]
+```
+
+---
+
+**Get Todo by ID**
+
+GET /api/todos/{id}
+
+Response — 200 OK
+
+```
+{
+  "id": 1,
+  "title": "Learn Spring Boot",
+  "completed": false,
+  "createdAt": "2026-01-26T14:32:10"
+}
+```
+
+
+Response — 404 Not Found
+If the ID does not exist.
+
+---
+
+**Update Todo**
+
+PUT /api/todos/{id}
+
+Request
+
+```
+{
+  "title": "Learn Spring Boot deeply",
+  "completed": true
+}
+```
+
+
+Response — 200 OK
+
+```
+{
+  "id": 1,
+  "title": "Learn Spring Boot deeply",
+  "completed": true,
+  "createdAt": "2026-01-26T14:32:10"
+}
+```
+
+---
+
+**Delete Todo**
+
+DELETE /api/todos/{id}
+
+Response — 204 No Content
+
+## 🛠 How to run locally
+**1. Requirements**
+
+```
+Java 17+
+
+Maven
+
+PostgreSQL
+```
+
+**2. Create database**
+CREATE DATABASE todos_db;
+
+**3. Configure Spring Boot**
+
+```
+application.properties
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/todos_db
+spring.datasource.username=postgres
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+```
+
+**4. Run the application**
+mvn spring-boot:run
+
+
+Server will start at:
+
+
+```
+http://localhost:8080
+
+```
+
+**5. Test API**
+
+Example using curl:
+
+```
+
+curl -X POST http://localhost:8080/api/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Build a REST API"}'
+
+```
